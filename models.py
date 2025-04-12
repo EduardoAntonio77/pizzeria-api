@@ -1,6 +1,8 @@
+# Importando as bibliotecas necessarias
 from datetime import datetime, timezone
 from database import db
 
+# Criando um modelo para a tabela pizzerias
 class Negocio(db.Model):
     __tablename__ = 'pizzerias'
     id = db.Column(db.Integer, primary_key = True, autoincrement = True)
@@ -10,9 +12,11 @@ class Negocio(db.Model):
     created_at = db.Column(db.DateTime, default = datetime.now(timezone.utc))
     deleted_at = db.Column(db.DateTime, nullable = True)
 
+    # Criando um relacionamento entre tabelas, com o adicional de carregar a tabela "Produto" sómente quando a tabela "pizzerias" for acessada
     tabela_pizzas = db.relationship('Produto', backref = 'pizzerias', lazy = True)
 
 
+# Criando um modelo para a tabela pizzas
 class Produto(db.Model):
     __tablename__ = 'pizzas'
     id = db.Column(db.Integer, primary_key = True, autoincrement = True)
@@ -22,5 +26,5 @@ class Produto(db.Model):
     created_at = db.Column(db.DateTime, default = datetime.now(timezone.utc))
     deleted_at = db.Column(db.DateTime, nullable = True)
 
-
+    # Cria uma coluna na tabela produtos que sempre estara inteligada a coluna "id" em pizzeria
     pizzerias_id = db.Column(db.Integer, db.ForeignKey('pizzerias.id'), nullable = False)
